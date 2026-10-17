@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biblioteca Universitaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Inicio de sesión: dibujado como un carné de biblioteca -->
+  <section id="login" class="login">
+    <form class="carne" onsubmit="iniciarSesion(event)">
+      <div class="carne-banda">
+        <strong>Biblioteca Universitaria</strong>
+        <span>Carné de préstamo</span>
+      </div>
+      <div class="carne-cuerpo">
+        <label>Correo institucional <input name="correo" type="email" required autocomplete="username"></label>
+        <label>Contraseña <input name="contraseña" type="password" required autocomplete="current-password"></label>
+        <button class="btn primary">Ingresar</button>
+      </div>
+      <div class="carne-pie">
+        <span>Entrar con un usuario de prueba:</span>
+        <button type="button" class="enlace" onclick="rellenarLogin('admin@universidad.edu.co', 'admin123')">bibliotecario</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('laura.perez@universidad.edu.co', 'clave123')">estudiante</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('andres.vega@universidad.edu.co', 'clave123')">docente</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('marta.ruiz@universidad.edu.co', 'clave123')">bloqueado</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Aplicación (se muestra después del login) -->
+  <div id="app" hidden>
+    <header class="cabecera">
+      <div class="marca">Biblioteca<span>Préstamo y devolución</span></div>
+      <nav id="menu"></nav>
+      <div class="sesion">
+        <span id="usuario-nombre"></span>
+        <button class="btn small" onclick="cerrarSesion()">Salir</button>
+      </div>
+    </header>
+    <main id="contenido"></main>
+  </div>
+
+  <!-- Ventana modal reutilizable para formularios -->
+  <dialog id="modal">
+    <div class="modal-header">
+      <h2 id="modal-titulo"></h2>
+      <button class="icono" onclick="cerrarModal()" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="modal-cuerpo"></div>
+  </dialog>
+
+  <div id="aviso" role="status"></div>
+
+  <!-- Un archivo por módulo. app.js va al final porque usa las funciones de los demás. -->
+  <script src="js/utils.js"></script>
+  <script src="js/libros.js"></script>
+  <script src="js/ejemplares.js"></script>
+  <script src="js/prestamos.js"></script>
+  <script src="js/usuarios.js"></script>
+  <script src="js/reportes.js"></script>
+  <script src="js/configuracion.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

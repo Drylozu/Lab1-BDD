@@ -1,0 +1,304 @@
+/*
+  Idea visual: el mostrador de una biblioteca.
+  - Los libros se muestran como fichas del catálogo de tarjetas (papel rayado, línea roja, perforación).
+  - Los estados son sellos de tinta violeta, como los de las fechas de devolución.
+  - Fechas, códigos e ISBN van en letra de máquina de escribir (Courier Prime).
+*/
+:root {
+  --escritorio: #dfe4e9;   /* fondo: gris acero del mueble de fichas */
+  --papel: #fffefa;        /* fichas y formularios */
+  --tinta: #1d2b45;        /* texto y botones principales */
+  --tinta-suave: #5d6a80;
+  --raya: #c9d6e6;         /* renglones azules de la ficha */
+  --linea-roja: #c8423b;   /* línea roja de la ficha y errores */
+  --sello: #5b3a9e;        /* tinta violeta de los sellos */
+  --verde: #2e6b4f;
+  --borde: #c3cbd5;
+
+  --letra: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --maquina: "Courier Prime", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--letra);
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--escritorio);
+  color: var(--tinta);
+}
+
+h1 { margin: 0; font-size: 2rem; line-height: 1.2; }
+h2 { font-size: 1.25rem; margin: 2rem 0 .75rem; }
+h3 { margin: 0; }
+a { color: var(--sello); }
+code, .fecha { font-family: var(--maquina); }
+.muted { color: var(--tinta-suave); }
+.small { font-size: .875rem; }
+[hidden] { display: none !important; }
+
+:focus-visible { outline: 3px solid var(--sello); outline-offset: 2px; }
+
+/* ---------- Botones y campos ---------- */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  padding: 8px 16px;
+  border: 1.5px solid var(--tinta);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--tinta);
+  cursor: pointer;
+}
+.btn:hover { background: rgba(29, 43, 69, .07); }
+.btn.primary { background: var(--tinta); color: var(--papel); }
+.btn.primary:hover { background: #2c3f63; }
+.btn.danger { border-color: var(--linea-roja); color: var(--linea-roja); }
+.btn.danger:hover { background: rgba(200, 66, 59, .08); }
+.btn.small { padding: 4px 10px; font-size: .875rem; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.enlace { border: none; background: none; padding: 0; font: inherit; color: var(--sello); text-decoration: underline; cursor: pointer; }
+
+input, select, textarea {
+  font: inherit;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--borde);
+  border-radius: 3px;
+  background: var(--papel);
+  color: var(--tinta);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--tinta); }
+
+/* ---------- Login: carné de biblioteca ---------- */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+.carne {
+  width: 100%;
+  max-width: 420px;
+  background: var(--papel);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 var(--borde), 0 12px 30px rgba(29, 43, 69, .18);
+}
+.carne-banda { background: var(--tinta); color: var(--papel); padding: 20px 24px; }
+.carne-banda strong { display: block; font-size: 1.35rem; }
+.carne-banda span { font-family: var(--maquina); opacity: .8; }
+.carne-cuerpo { padding: 24px; display: grid; gap: 14px; }
+.carne-cuerpo label { display: grid; gap: 4px; font-weight: 700; font-size: .9rem; }
+.carne-pie {
+  padding: 14px 24px 18px;
+  border-top: 1.5px dashed var(--borde);
+  font-size: .875rem;
+  color: var(--tinta-suave);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.carne-pie span { width: 100%; }
+
+/* ---------- Cabecera ---------- */
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px 0;
+  border-bottom: 2px solid var(--tinta);
+}
+.marca { font-size: 1.5rem; font-weight: 700; padding-bottom: 12px; }
+.marca span { display: block; font-family: var(--maquina); font-size: .85rem; font-weight: 400; color: var(--tinta-suave); }
+#menu { display: flex; flex: 1; flex-wrap: wrap; align-self: flex-end; }
+#menu a {
+  padding: 10px 14px;
+  color: var(--tinta-suave);
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  margin-bottom: -2px;
+}
+#menu a:hover { color: var(--tinta); }
+#menu a.activo { color: var(--tinta); font-weight: 700; background: var(--escritorio); border-color: var(--tinta); border-bottom: 2px solid var(--escritorio); }
+.sesion { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; }
+.sesion small { display: block; font-family: var(--maquina); color: var(--tinta-suave); }
+
+main { max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; }
+
+.encabezado { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.encabezado p { margin: 4px 0 0; max-width: 60ch; }
+
+.filtros { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
+.filtros input[type=search] { flex: 1; min-width: 220px; }
+.filtros select { width: auto; }
+.filtros label { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.filtros label input { width: auto; }
+
+/* ---------- Ficha de catálogo (el elemento protagonista) ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 20px; }
+
+.ficha {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 20px 34px;
+  font-family: var(--maquina);
+  line-height: 24px;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 var(--borde), 0 3px 10px rgba(29, 43, 69, .10);
+  /* renglones azules cada 24px, empezando debajo de la cabecera */
+  background:
+    linear-gradient(var(--papel) 0 52px, transparent 52px),
+    repeating-linear-gradient(var(--papel) 0 23px, var(--raya) 23px 24px);
+  background-color: var(--papel);
+}
+/* perforación de la ficha (por donde pasa la varilla del cajón) */
+.ficha::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--escritorio);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+}
+.ficha-cabecera {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  font-size: .85rem;
+  color: var(--tinta-suave);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--linea-roja);
+}
+.ficha p { margin: 0; }
+.ficha-autor { font-weight: 700; }
+.ficha-titulo { font-family: var(--maquina); font-size: 1.05rem; padding-left: 2ch; }
+.ficha-imprenta { padding-left: 2ch; }
+.ficha-desc { padding-left: 2ch; color: var(--tinta-suave); flex: 1; }
+.ficha-pie { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; font-family: var(--letra); }
+
+.acciones { display: flex; gap: 6px; flex-wrap: wrap; }
+td.acciones { display: table-cell; white-space: nowrap; }
+td.acciones .btn + .btn { margin-left: 6px; }
+.vacio { color: var(--tinta-suave); padding: 24px 0; }
+
+/* ---------- Sellos de estado ---------- */
+.badge {
+  display: inline-block;
+  padding: 1px 8px;
+  font-family: var(--maquina);
+  font-weight: 700;
+  font-size: .85rem;
+  white-space: nowrap;
+  color: var(--sello);
+  border: 3px double currentColor;
+  border-radius: 4px;
+  transform: rotate(-2deg);
+}
+.badge.disponible, .badge.activo, .badge.devuelto { color: var(--verde); }
+.badge.perdido, .badge.bloqueado, .badge.rechazado, .badge.vencido, .badge.agotado { color: var(--linea-roja); }
+.badge.solicitado { color: var(--tinta-suave); border-style: dashed; border-width: 2px; }
+
+/* ---------- Tablas: hoja de circulación ---------- */
+.tabla { overflow-x: auto; background: var(--papel); border-top: 2px solid var(--tinta); }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--raya); vertical-align: top; }
+th { font-size: .875rem; color: var(--tinta-suave); border-bottom: 2px solid var(--linea-roja); }
+td.fecha { white-space: nowrap; }
+.fila-vencida td { background: rgba(200, 66, 59, .06); }
+.fila-vencida td:first-child { box-shadow: inset 4px 0 0 var(--linea-roja); }
+
+.pestanas { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+.pestanas button { border: none; background: none; padding: 4px 0; font: inherit; color: var(--tinta-suave); cursor: pointer; border-bottom: 3px solid transparent; }
+.pestanas button.activo { color: var(--tinta); font-weight: 700; border-bottom-color: var(--sello); }
+
+/* ---------- Conteos y reportes ---------- */
+.stats { display: flex; flex-wrap: wrap; margin-bottom: 24px; border-top: 2px solid var(--tinta); border-bottom: 1px solid var(--borde); }
+.stat { flex: 1 1 160px; padding: 14px 20px 14px 0; color: var(--tinta-suave); }
+.stat + .stat { padding-left: 20px; border-left: 1px solid var(--borde); }
+.stat span { display: block; font-family: var(--maquina); font-size: 2rem; font-weight: 700; color: var(--tinta); line-height: 1.2; }
+.stat.verde span { color: var(--verde); }
+.stat.azul span { color: var(--sello); }
+.stat.rojo span { color: var(--linea-roja); }
+
+.dos-columnas { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; }
+.card { background: var(--papel); padding: 4px 20px 16px; border-top: 2px solid var(--tinta); }
+.card h2 { margin-top: 12px; }
+.barra { display: grid; grid-template-columns: 1fr 120px 2.5ch; gap: 12px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--raya); }
+.barra-nombre { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.barra-fondo { height: 10px; background: var(--escritorio); }
+.barra-fondo span { display: block; height: 100%; background: var(--sello); }
+.barra b { font-family: var(--maquina); text-align: right; }
+
+/* ---------- Formularios y modal ---------- */
+.form { display: grid; gap: 14px; }
+.form label { display: grid; gap: 4px; font-weight: 700; font-size: .9rem; }
+.form small { font-weight: 400; }
+.fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.form-acciones { display: flex; justify-content: flex-end; gap: 8px; }
+.angosto { max-width: 460px; background: var(--papel); padding: 20px; border-top: 2px solid var(--tinta); }
+
+.alerta, .info { padding: 10px 14px; margin-bottom: 16px; border-left: 4px solid; background: var(--papel); }
+.alerta { border-color: var(--linea-roja); color: var(--linea-roja); }
+.info { border-color: var(--verde); color: var(--verde); }
+.form .alerta, .form .info { margin: 0; }
+
+dialog {
+  width: min(780px, calc(100vw - 32px));
+  max-height: 90vh;
+  padding: 24px;
+  border: none;
+  border-top: 6px solid var(--tinta);
+  border-radius: 4px;
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: 0 20px 50px rgba(29, 43, 69, .3);
+}
+dialog::backdrop { background: rgba(29, 43, 69, .45); }
+dialog h3 { margin-top: 24px; }
+dialog .tabla { border-top-width: 1px; }
+.modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+.modal-header h2 { margin: 0; }
+.icono { border: none; background: none; font-size: 1.25rem; color: var(--tinta-suave); cursor: pointer; }
+
+/* ---------- Aviso flotante ---------- */
+#aviso {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translate(-50%, 16px);
+  max-width: calc(100vw - 32px);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: var(--papel);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 100;
+}
+#aviso.visible { opacity: 1; transform: translate(-50%, 0); }
+#aviso.ok { background: var(--tinta); }
+#aviso.error { background: var(--linea-roja); }
+
+@media (max-width: 640px) {
+  .cabecera { gap: 0 8px; }
+  .marca { flex: 1; }
+  .sesion { order: 2; }
+  #menu { order: 3; flex-basis: 100%; overflow-x: auto; flex-wrap: nowrap; }
+  #menu a { white-space: nowrap; }
+  .filtros input[type=search] { min-width: 0; flex-basis: 100%; }
+  .barra { grid-template-columns: 1fr 70px 2.5ch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #aviso { transition: none; }
+}
