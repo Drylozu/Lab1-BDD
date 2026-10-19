@@ -11,7 +11,7 @@
 </head>
 <body>
 
-  <!-- Inicio de sesión: dibujado como un carné de biblioteca -->
+  <!-- Inicio de sesión -->
   <section id="login" class="login">
     <form class="carne" onsubmit="iniciarSesion(event)">
       <div class="carne-banda">
@@ -25,15 +25,15 @@
       </div>
       <div class="carne-pie">
         <span>Entrar con un usuario de prueba:</span>
-        <button type="button" class="enlace" onclick="rellenarLogin('admin@universidad.edu.co', 'admin123')">bibliotecario</button>
-        <button type="button" class="enlace" onclick="rellenarLogin('laura.perez@universidad.edu.co', 'clave123')">estudiante</button>
-        <button type="button" class="enlace" onclick="rellenarLogin('andres.vega@universidad.edu.co', 'clave123')">docente</button>
-        <button type="button" class="enlace" onclick="rellenarLogin('marta.ruiz@universidad.edu.co', 'clave123')">bloqueado</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('valentina.rios@universidad.edu.co', 'admin123')">bibliotecario</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('sofia.castano@universidad.edu.co', 'clave123')">estudiante</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('natalia.quintero@universidad.edu.co', 'clave123')">docente</button>
+        <button type="button" class="enlace" onclick="rellenarLogin('samuel.ortiz@universidad.edu.co', 'clave123')">bloqueado</button>
       </div>
     </form>
   </section>
 
-  <!-- Aplicación (se muestra después del login) -->
+  <!-- Aplicación -->
   <div id="app" hidden>
     <header class="cabecera">
       <div class="marca">Biblioteca<span>Préstamo y devolución</span></div>
@@ -46,7 +46,7 @@
     <main id="contenido"></main>
   </div>
 
-  <!-- Ventana modal reutilizable para formularios -->
+  <!-- Modal -->
   <dialog id="modal">
     <div class="modal-header">
       <h2 id="modal-titulo"></h2>
@@ -57,7 +57,7 @@
 
   <div id="aviso" role="status"></div>
 
-  <!-- Un archivo por módulo. app.js va al final porque usa las funciones de los demás. -->
+  <!-- app.js va al final -->
   <script src="js/utils.js"></script>
   <script src="js/libros.js"></script>
   <script src="js/ejemplares.js"></script>

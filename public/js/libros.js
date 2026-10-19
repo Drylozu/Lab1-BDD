@@ -1,7 +1,3 @@
-// =========================================================
-// Catálogo (búsqueda de libros) + CRUD de libros
-// =========================================================
-
 async function verCatalogo() {
   const { categorias } = await api('/libros/catalogos');
   $('#contenido').innerHTML = `
@@ -35,7 +31,8 @@ async function buscarLibros() {
     disponibles: $('#f-disponibles').checked ? '1' : '',
   });
   const libros = await api('/libros?' + params);
-  $('#lista-libros').innerHTML = libros.map(tarjetaLibro).join('') || '<p class="vacio">Ningún libro coincide con la búsqueda. Prueba con otra palabra o quita los filtros.</p>';
+  const vacio = '<p class="vacio">Ningún libro coincide con la búsqueda. Prueba con otra palabra o quita los filtros.</p>';
+  $('#lista-libros').innerHTML = libros.map(tarjetaLibro).join('') || vacio;
 }
 
 function tarjetaLibro(l) {
@@ -48,7 +45,6 @@ function tarjetaLibro(l) {
     ? badge('disponible', `${l.disponibles} de ${l.total_ejemplares} en estante`)
     : badge('agotado', l.total_ejemplares ? 'todos prestados' : 'sin ejemplares');
 
-  // Se dibuja como una ficha del catálogo de tarjetas de una biblioteca
   return `
     <article class="ficha">
       <div class="ficha-cabecera"><span>${esc(l.categoria)}</span><span>ISBN ${esc(l.isbn)}</span></div>

@@ -1,7 +1,3 @@
-// =========================================================
-// Sesión y navegación
-// =========================================================
-
 function rellenarLogin(correo, clave) {
   const form = $('#login form');
   form.correo.value = correo;
@@ -50,11 +46,12 @@ function mostrarApp() {
 function navegar() {
   if (!usuario) return;
   const vista = location.hash.slice(1) || 'catalogo';
-  document.querySelectorAll('#menu a').forEach((a) => a.classList.toggle('activo', a.getAttribute('href') === '#' + vista));
+  document.querySelectorAll('#menu a').forEach((a) => {
+    a.classList.toggle('activo', a.getAttribute('href') === '#' + vista);
+  });
   (VISTAS[vista] || verCatalogo)();
 }
 
 window.addEventListener('hashchange', navegar);
 
-// Al cargar la página: si ya había sesión guardada, se muestra la aplicación
 if (usuario) mostrarApp();

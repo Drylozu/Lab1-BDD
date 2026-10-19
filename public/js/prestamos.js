@@ -1,13 +1,8 @@
-// =========================================================
-// Préstamos (lector): solicitar y ver historial propio
-// =========================================================
-
 async function solicitarPrestamo(idLibro) {
   await api('/prestamos', 'POST', { id_libro: idLibro });
   aviso('Solicitud enviada. El bibliotecario debe aprobarla.');
   buscarLibros();
 }
-
 
 async function verMisPrestamos() {
   const prestamos = await api(`/prestamos/usuario/${usuario.id_usuario}`);
@@ -26,7 +21,13 @@ async function verMisPrestamos() {
     ${tablaPrestamos(prestamos, { conUsuario: false })}`;
 }
 
-// Tabla de préstamos reutilizada por el lector, el bibliotecario y el historial de usuario
+function celdaDevolucion(p) {
+  if (!p.fecha_devolucion) return '—';
+  const retraso = p.dias_retraso ? `${p.dias_retraso} días tarde, multa ${pesos(p.valor_multa)}` : 'A tiempo';
+  const observacion = p.observaciones ? `<br>Observación: ${esc(p.observaciones)}` : '';
+  return `<span class="fecha">${fecha(p.fecha_devolucion)}</span><br><small class="muted">${retraso}${observacion}</small>`;
+}
+
 function tablaPrestamos(prestamos, { conUsuario = true, conAcciones = false } = {}) {
   if (prestamos.length === 0) return '<p class="vacio">No hay préstamos aquí.</p>';
   const filas = prestamos.map((p) => `
@@ -38,9 +39,7 @@ function tablaPrestamos(prestamos, { conUsuario = true, conAcciones = false } = 
       <td class="fecha">${fecha(p.fecha_prestamo)}</td>
       <td class="fecha">${fecha(p.fecha_vencimiento)}</td>
       <td>${estadoPrestamo(p)}</td>
-      <td>${p.fecha_devolucion
-        ? `<span class="fecha">${fecha(p.fecha_devolucion)}</span><br><small class="muted">${p.dias_retraso ? `${p.dias_retraso} días tarde, multa ${pesos(p.valor_multa)}` : 'A tiempo'}${p.observaciones ? `<br>Observación: ${esc(p.observaciones)}` : ''}</small>`
-        : '—'}</td>
+      <td>${celdaDevolucion(p)}</td>
       ${conAcciones ? `<td class="acciones">${accionesPrestamo(p)}</td>` : ''}
     </tr>`).join('');
   return `
@@ -54,10 +53,6 @@ function tablaPrestamos(prestamos, { conUsuario = true, conAcciones = false } = 
       </table>
     </div>`;
 }
-
-// =========================================================
-// Préstamos (bibliotecario): aprobar, rechazar y devolver
-// =========================================================
 
 let filtroPrestamos = 'solicitados';
 
@@ -119,11 +114,9 @@ async function formDevolver(id, diasRetraso) {
   const multa = diasRetraso * config.multa_por_dia;
   abrirModal('Registrar devolución #' + id, `
     <form class="form" onsubmit="devolverPrestamo(event, ${id})">
-      <div class="${diasRetraso > 0 ? 'alerta' : 'info'}">
-        ${diasRetraso > 0
-          ? `Retraso de <b>${diasRetraso} días</b> → multa de <b>${pesos(multa)}</b> (${pesos(config.multa_por_dia)} por día)`
-          : 'Devolución a tiempo, sin multa.'}
-      </div>
+      ${diasRetraso > 0
+        ? `<div class="alerta">Retraso de <b>${diasRetraso} días</b> → multa de <b>${pesos(multa)}</b> (${pesos(config.multa_por_dia)} por día)</div>`
+        : '<div class="info">Devolución a tiempo, sin multa.</div>'}
       <label>Observaciones del ejemplar
         <input name="observaciones" list="dl-observaciones" placeholder="Opcional: dañado, páginas faltantes…"></label>
       <datalist id="dl-observaciones"><option value="dañado"><option value="páginas faltantes"></datalist>

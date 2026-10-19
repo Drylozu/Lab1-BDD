@@ -1,7 +1,3 @@
-// =========================================================
-// Configuración: tarifa de multa por día
-// =========================================================
-
 async function verConfiguracion() {
   const c = await api('/configuracion');
   $('#contenido').innerHTML = `

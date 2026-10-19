@@ -1,7 +1,3 @@
-// =========================================================
-// Reportes
-// =========================================================
-
 async function verReportes() {
   $('#contenido').innerHTML = `
     <div class="encabezado">
@@ -20,7 +16,6 @@ async function cargarReportes() {
   const r = await api('/reportes?' + params);
   const inv = r.inventario;
 
-  // Tabla con barras horizontales proporcionales al total
   const ranking = (filas, nombre) => {
     if (filas.length === 0) return '<p class="vacio">No hubo préstamos en este periodo.</p>';
     const max = filas[0].total;

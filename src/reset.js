@@ -1,4 +1,3 @@
-// Uso: npm run reset  → deja la base de datos como recién creada desde ddl.sql
 const { crearTablas } = require('./db');
 
 crearTablas();

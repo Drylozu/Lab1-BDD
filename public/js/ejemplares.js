@@ -1,7 +1,3 @@
-// =========================================================
-// CRUD de ejemplares (dentro de la ventana de un libro)
-// =========================================================
-
 let ejemplaresActuales = [];
 
 async function verEjemplares(idLibro) {
@@ -27,8 +23,8 @@ async function verEjemplares(idLibro) {
     <form id="form-ejemplar" class="form" onsubmit="guardarEjemplar(event, ${idLibro})">
       <input type="hidden" name="id_ejemplar">
       <div class="fila">
-        <label>Código de barras <input name="codigo_barras" required placeholder="EJ-0007"></label>
-        <label>Ubicación <input name="ubicacion" required placeholder="Sala 1 - Estante A1"></label>
+        <label>Código de barras <input name="codigo_barras" required placeholder="BC-1003"></label>
+        <label>Ubicación <input name="ubicacion" required placeholder="Piso 2 - Módulo C1"></label>
         <label>Estado
           <select name="estado"><option>disponible</option><option>perdido</option></select>
         </label>

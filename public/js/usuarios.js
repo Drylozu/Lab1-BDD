@@ -1,7 +1,3 @@
-// =========================================================
-// CRUD de usuarios + historial
-// =========================================================
-
 let usuariosActuales = [];
 
 async function verUsuarios() {

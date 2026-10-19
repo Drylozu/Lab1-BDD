@@ -1,8 +1,6 @@
-// Sesión (simple): el frontend envía el id del usuario en el header x-usuario-id
 const { db } = require('./db');
 const { error } = require('./utils');
 
-// POST /api/login
 function login(req, res) {
   const { correo, contraseña } = req.body;
   const usuario = db.prepare(`
@@ -13,10 +11,12 @@ function login(req, res) {
   res.json(usuario);
 }
 
-// Middleware: exige que haya un usuario logueado y lo deja en req.usuario
+// El frontend envía el id del usuario logueado en el header x-usuario-id
 function requiereSesion(req, res, next) {
   const id = req.get('x-usuario-id');
-  req.usuario = id && db.prepare('SELECT id_usuario, nombres, rol, estado FROM usuario WHERE id_usuario = ?').get(id);
+  if (id) {
+    req.usuario = db.prepare('SELECT id_usuario, nombres, rol, estado FROM usuario WHERE id_usuario = ?').get(id);
+  }
   if (!req.usuario) throw error(401, 'Debe iniciar sesión');
   next();
 }

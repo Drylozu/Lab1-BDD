@@ -1,4 +1,3 @@
-// Rutas de reportes (montadas en /api/reportes)
 const express = require('express');
 const { db } = require('../db');
 const { hoy } = require('../utils');
@@ -6,17 +5,21 @@ const { soloBibliotecario } = require('../sesion');
 
 const router = express.Router();
 
+function contar(sql, ...valores) {
+  return db.prepare(sql).get(...valores).total;
+}
+
+function inventarioPorEstado() {
+  const inventario = { disponible: 0, prestado: 0, perdido: 0 };
+  const filas = db.prepare('SELECT estado, COUNT(*) AS total FROM ejemplar GROUP BY estado').all();
+  for (const fila of filas) inventario[fila.estado] = fila.total;
+  return inventario;
+}
+
 router.get('/', soloBibliotecario, (req, res) => {
-  // Si no se elige periodo se toma "desde siempre" hasta "para siempre"
   const desde = req.query.desde || '0000-01-01';
   const hasta = req.query.hasta || '9999-12-31';
 
-  const inventario = { disponible: 0, prestado: 0, perdido: 0 };
-  for (const fila of db.prepare('SELECT estado, COUNT(*) AS total FROM ejemplar GROUP BY estado').all()) {
-    inventario[fila.estado] = fila.total;
-  }
-
-  const contar = (sql, ...valores) => db.prepare(sql).get(...valores).total;
   const prestamos = {
     pendientes: contar("SELECT COUNT(*) AS total FROM prestamo WHERE estado = 'solicitado'"),
     activos: contar("SELECT COUNT(*) AS total FROM prestamo WHERE estado = 'aprobado'"),
@@ -43,7 +46,13 @@ router.get('/', soloBibliotecario, (req, res) => {
     ORDER BY total DESC
     LIMIT 10`).all(desde, hasta);
 
-  res.json({ inventario, prestamos, multas, librosMasPrestados, usuariosConMasPrestamos });
+  res.json({
+    inventario: inventarioPorEstado(),
+    prestamos,
+    multas,
+    librosMasPrestados,
+    usuariosConMasPrestamos,
+  });
 });
 
 module.exports = router;

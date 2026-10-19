@@ -1,9 +1,3 @@
-/*
-  Idea visual: el mostrador de una biblioteca.
-  - Los libros se muestran como fichas del catálogo de tarjetas (papel rayado, línea roja, perforación).
-  - Los estados son sellos de tinta violeta, como los de las fechas de devolución.
-  - Fechas, códigos e ISBN van en letra de máquina de escribir (Courier Prime).
-*/
 :root {
   --escritorio: #dfe4e9;   /* fondo: gris acero del mueble de fichas */
   --papel: #fffefa;        /* fichas y formularios */

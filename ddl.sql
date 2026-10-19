@@ -1,7 +1,4 @@
--- =========================================================
--- Biblioteca universitaria - versión SQLite
--- =========================================================
-PRAGMA foreign_keys = ON;   -- obligatorio en SQLite para que los REFERENCES funcionen
+PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS devolucion;
 DROP TABLE IF EXISTS prestamo;
@@ -100,68 +97,89 @@ CREATE TABLE configuracion (
     valor NUMERIC(10,2) NOT NULL
 );
 
-
--- =========================================================
 -- Datos de prueba
--- =========================================================
 INSERT INTO configuracion (clave, valor) VALUES
-    ('multa_por_dia', 1000),
-    ('dias_prestamo', 7);
+    ('multa_por_dia', 1500),
+    ('dias_prestamo', 10);
 
 INSERT INTO usuario (codigo, identificacion, nombres, correo, contraseña, rol, carrera, estado) VALUES
-    ('ADM001', '1000000001', 'Administrador Biblioteca', 'admin@universidad.edu.co', 'admin123', 'bibliotecario', NULL, 'activo'),
-    ('EST001', '1000000002', 'Laura Pérez',   'laura.perez@universidad.edu.co',  'clave123', 'estudiante', 'Ingeniería de Sistemas', 'activo'),
-    ('EST002', '1000000003', 'Carlos Gómez',  'carlos.gomez@universidad.edu.co', 'clave123', 'estudiante', 'Derecho', 'activo'),
-    ('EST003', '1000000004', 'Marta Ruiz',    'marta.ruiz@universidad.edu.co',   'clave123', 'estudiante', 'Medicina', 'bloqueado'),
-    ('DOC001', '1000000005', 'Dr. Andrés Vega','andres.vega@universidad.edu.co', 'clave123', 'docente', NULL, 'activo');
+    ('BIB001', '1020304050', 'Valentina Ríos',        'valentina.rios@universidad.edu.co',   'admin123', 'bibliotecario', NULL, 'activo'),
+    ('BIB002', '1020304051', 'Julián Herrera',        'julian.herrera@universidad.edu.co',   'admin123', 'bibliotecario', NULL, 'activo'),
+    ('EST101', '1098765401', 'Sofía Castaño',         'sofia.castano@universidad.edu.co',    'clave123', 'estudiante', 'Ingeniería de Datos', 'activo'),
+    ('EST102', '1098765402', 'Mateo Londoño',         'mateo.londono@universidad.edu.co',    'clave123', 'estudiante', 'Diseño Digital', 'activo'),
+    ('EST103', '1098765403', 'Isabella Duarte',       'isabella.duarte@universidad.edu.co',  'clave123', 'estudiante', 'Biotecnología', 'activo'),
+    ('EST104', '1098765404', 'Samuel Ortiz',          'samuel.ortiz@universidad.edu.co',     'clave123', 'estudiante', 'Ciencia Política', 'bloqueado'),
+    ('EST105', '1098765405', 'Camila Restrepo',       'camila.restrepo@universidad.edu.co',  'clave123', 'estudiante', 'Ingeniería Mecatrónica', 'activo'),
+    ('DOC101', '5201234567', 'Dra. Natalia Quintero', 'natalia.quintero@universidad.edu.co', 'clave123', 'docente', NULL, 'activo'),
+    ('DOC102', '5201234568', 'Prof. Tomás Arango',    'tomas.arango@universidad.edu.co',     'clave123', 'docente', NULL, 'activo');
 
 INSERT INTO categoria (nombre) VALUES
-    ('Programación'), ('Bases de Datos'), ('Literatura'), ('Matemáticas'), ('Historia');
+    ('Ciencia Ficción'), ('Novela Contemporánea'), ('Ensayo'), ('Inteligencia Artificial'), ('Ingeniería de Datos');
 
 INSERT INTO editorial (nombre) VALUES
-    ('Pearson'), ('McGraw-Hill'), ('Alfaguara'), ('O''Reilly');
+    ('Anagrama'), ('Nova'), ('Salamandra'), ('Siruela'), ('Debate'), ('O''Reilly'), ('Random House');
 
 INSERT INTO autor (nombre) VALUES
-    ('Abraham Silberschatz'), ('Henry F. Korth'), ('S. Sudarshan'),
-    ('Gabriel García Márquez'), ('Ramez Elmasri'), ('Shamkant Navathe'),
-    ('Eric Matthes');
+    ('Kazuo Ishiguro'), ('Andy Weir'), ('Gabrielle Zevin'), ('David Uclés'),
+    ('Yuval Noah Harari'), ('Mustafa Suleyman'), ('Michael Bhaskar'), ('Chip Huyen'),
+    ('Martin Kleppmann'), ('Chris Riccomini'), ('Gabriela Cabezón Cámara'), ('Samantha Harvey');
 
 INSERT INTO libro (isbn, titulo, año, descripcion, id_editorial, id_categoria) VALUES
-    ('9780078022159', 'Fundamentos de Bases de Datos', 2019, 'Texto clásico de bases de datos relacionales.', 2, 2),
-    ('9780133970777', 'Fundamentos de Sistemas de Bases de Datos', 2016, 'Modelado, SQL y diseño de bases de datos.', 1, 2),
-    ('9788420471839', 'Cien años de soledad', 1967, 'Novela de la saga de los Buendía.', 3, 3),
-    ('9781593279288', 'Python Crash Course', 2019, 'Introducción práctica a Python.', 4, 1);
+    ('9788433980861', 'Klara y el Sol', 2021, 'Una amiga artificial observa el mundo humano desde un escaparate.', 1, 1),
+    ('9788418037177', 'Proyecto Hail Mary', 2021, 'Un profesor despierta solo en una nave con la misión de salvar la Tierra.', 2, 1),
+    ('9788419346230', 'Mañana, y mañana, y mañana', 2023, 'Dos amigos crean videojuegos durante treinta años.', 3, 2),
+    ('9788419942807', 'La península de las casas vacías', 2024, 'La Guerra Civil española contada con realismo mágico.', 4, 2),
+    ('9788419399878', 'Nexus', 2024, 'Historia de las redes de información, de la Edad de Piedra a la IA.', 5, 3),
+    ('9788419642103', 'La ola que viene', 2023, 'Los riesgos y oportunidades de la inteligencia artificial y la biotecnología.', 5, 4),
+    ('9781098166304', 'AI Engineering', 2025, 'Cómo construir aplicaciones con modelos fundacionales.', 6, 4),
+    ('9781098119065', 'Designing Data-Intensive Applications (2.ª ed.)', 2025, 'Sistemas de datos confiables, escalables y mantenibles.', 6, 5),
+    ('9788439742524', 'Las niñas del naranjel', 2023, 'La monja alférez huye a la selva sudamericana.', 7, 2),
+    ('9788433922502', 'Orbital', 2024, 'Un día en la Estación Espacial Internacional: dieciséis amaneceres.', 1, 1);
 
 INSERT INTO libro_autor (id_libro, id_autor) VALUES
-    (1, 1), (1, 2), (1, 3),
-    (2, 5), (2, 6),
-    (3, 4),
-    (4, 7);
+    (1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+    (6, 6), (6, 7),
+    (7, 8),
+    (8, 9), (8, 10),
+    (9, 11), (10, 12);
 
 INSERT INTO ejemplar (codigo_barras, id_libro, ubicacion, estado) VALUES
-    ('EJ-0001', 1, 'Sala 1 - Estante A1', 'disponible'),
-    ('EJ-0002', 1, 'Sala 1 - Estante A1', 'disponible'),
-    ('EJ-0003', 2, 'Sala 1 - Estante A2', 'disponible'),
-    ('EJ-0004', 3, 'Sala 2 - Estante B1', 'disponible'),
-    ('EJ-0005', 3, 'Sala 2 - Estante B1', 'perdido'),
-    ('EJ-0006', 4, 'Sala 1 - Estante A3', 'disponible');
+    ('BC-1001',  1,  'Piso 2 - Módulo C1', 'disponible'),
+    ('BC-1002',  1,  'Piso 2 - Módulo C1', 'prestado'),
+    ('BC-2001',  2,  'Piso 2 - Módulo C1', 'prestado'),
+    ('BC-2002',  2,  'Piso 2 - Módulo C1', 'disponible'),
+    ('BC-2003',  2,  'Piso 2 - Módulo C1', 'disponible'),
+    ('BC-3001',  3,  'Piso 2 - Módulo C2', 'disponible'),
+    ('BC-4001',  4,  'Piso 2 - Módulo C2', 'disponible'),
+    ('BC-4002',  4,  'Piso 2 - Módulo C2', 'perdido'),
+    ('BC-5001',  5,  'Piso 3 - Módulo E1', 'prestado'),
+    ('BC-5002',  5,  'Piso 3 - Módulo E1', 'disponible'),
+    ('BC-6001',  6,  'Piso 3 - Módulo T4', 'disponible'),
+    ('BC-7001',  7,  'Piso 3 - Módulo T4', 'prestado'),
+    ('BC-7002',  7,  'Piso 3 - Módulo T4', 'disponible'),
+    ('BC-8001',  8,  'Piso 3 - Módulo T5', 'disponible'),
+    ('BC-8002',  8,  'Piso 3 - Módulo T5', 'disponible'),
+    ('BC-9001',  9,  'Piso 2 - Módulo C2', 'disponible'),
+    ('BC-10001', 10, 'Piso 2 - Módulo C1', 'disponible'),
+    ('BC-10002', 10, 'Piso 2 - Módulo C1', 'perdido');
 
--- Préstamo activo (vence en 4 días)
-INSERT INTO prestamo (id_usuario, id_ejemplar, fecha_prestamo, fecha_vencimiento, estado, id_aprobador)
-VALUES (2, 2, DATE('now','localtime','-3 days'), DATE('now','localtime','+4 days'), 'aprobado', 1);
-UPDATE ejemplar SET estado = 'prestado' WHERE id_ejemplar = 2;
+INSERT INTO prestamo (id_usuario, id_ejemplar, fecha_solicitud, fecha_prestamo, fecha_vencimiento, estado, id_aprobador) VALUES
+    (3, 2,  DATETIME('now','localtime','-3 days'),  DATE('now','localtime','-2 days'),  DATE('now','localtime','+8 days'),  'aprobado', 1),
+    (4, 3,  DATETIME('now','localtime','-16 days'), DATE('now','localtime','-15 days'), DATE('now','localtime','-5 days'),  'aprobado', 2),
+    (9, 9,  DATETIME('now','localtime','-1 days'),  DATE('now','localtime','-1 days'),  DATE('now','localtime','+9 days'),  'aprobado', 1),
+    (7, 12, DATETIME('now','localtime','-13 days'), DATE('now','localtime','-12 days'), DATE('now','localtime','-2 days'),  'aprobado', 1),
+    (3, 7,  DATETIME('now','localtime','-41 days'), DATE('now','localtime','-40 days'), DATE('now','localtime','-30 days'), 'devuelto', 1),
+    (5, 14, DATETIME('now','localtime','-26 days'), DATE('now','localtime','-25 days'), DATE('now','localtime','-15 days'), 'devuelto', 2),
+    (6, 16, DATETIME('now','localtime','-61 days'), DATE('now','localtime','-60 days'), DATE('now','localtime','-50 days'), 'devuelto', 1),
+    (8, 1,  DATETIME('now','localtime','-21 days'), DATE('now','localtime','-20 days'), DATE('now','localtime','-10 days'), 'devuelto', 2),
+    (9, 17, DATETIME('now','localtime','-10 days'), DATE('now','localtime','-9 days'),  DATE('now','localtime','+1 days'),  'devuelto', 1),
+    (4, 11, DATETIME('now','localtime','-6 days'),  NULL, NULL, 'rechazado', 2),
+    (8, 6,  DATETIME('now','localtime','-1 days'),  NULL, NULL, 'solicitado', NULL),
+    (5, 13, DATETIME('now','localtime'),            NULL, NULL, 'solicitado', NULL);
 
--- Préstamo vencido (13 días de retraso)
-INSERT INTO prestamo (id_usuario, id_ejemplar, fecha_prestamo, fecha_vencimiento, estado, id_aprobador)
-VALUES (3, 4, DATE('now','localtime','-20 days'), DATE('now','localtime','-13 days'), 'aprobado', 1);
-UPDATE ejemplar SET estado = 'prestado' WHERE id_ejemplar = 4;
-
--- Préstamo ya devuelto con 3 días de retraso
-INSERT INTO prestamo (id_usuario, id_ejemplar, fecha_prestamo, fecha_vencimiento, estado, id_aprobador)
-VALUES (2, 6, DATE('now','localtime','-30 days'), DATE('now','localtime','-23 days'), 'devuelto', 1);
-INSERT INTO devolucion (id_prestamo, fecha_devolucion, dias_retraso, valor_multa, observaciones, id_receptor)
-VALUES (3, DATE('now','localtime','-20 days'), 3, 3000, 'páginas faltantes', 1);
-
--- Solicitud pendiente de aprobación
-INSERT INTO prestamo (id_usuario, id_ejemplar, estado)
-VALUES (5, 1, 'solicitado');
+INSERT INTO devolucion (id_prestamo, fecha_devolucion, dias_retraso, valor_multa, observaciones, id_receptor) VALUES
+    (5, DATE('now','localtime','-27 days'), 3,  4500,  NULL, 1),
+    (6, DATE('now','localtime','-16 days'), 0,  0,     NULL, 2),
+    (7, DATE('now','localtime','-38 days'), 12, 18000, 'portada dañada', 1),
+    (8, DATE('now','localtime','-12 days'), 0,  0,     NULL, 2),
+    (9, DATE('now','localtime','-3 days'),  0,  0,     'subrayado a lápiz', 1);

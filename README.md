@@ -14,10 +14,11 @@ npm run reset      # (opcional) recrea la base desde ddl.sql con los datos de pr
 
 | Rol           | Correo                           | Contraseña |
 |---------------|----------------------------------|------------|
-| Bibliotecario | admin@universidad.edu.co         | admin123   |
-| Estudiante    | laura.perez@universidad.edu.co   | clave123   |
-| Docente       | andres.vega@universidad.edu.co   | clave123   |
-| Bloqueado     | marta.ruiz@universidad.edu.co    | clave123   |
+| Bibliotecario | valentina.rios@universidad.edu.co   | admin123   |
+| Bibliotecario | julian.herrera@universidad.edu.co   | admin123   |
+| Estudiante    | sofia.castano@universidad.edu.co    | clave123   |
+| Docente       | natalia.quintero@universidad.edu.co | clave123   |
+| Bloqueado     | samuel.ortiz@universidad.edu.co     | clave123   |
 
 ## Estructura
 
@@ -61,5 +62,5 @@ public/
    (`días × multa_por_dia` de la tabla `configuracion`), se guardan las observaciones y el
    ejemplar vuelve a `disponible`.
 
-Toda la lógica que cambia varias tablas a la vez se hace en el servidor dentro de una
-transacción (`db.transaction`), en lugar de usar triggers.
+La lógica que cambia varias tablas se hace en el servidor con consultas SQL simples,
+sin transacciones ni triggers.

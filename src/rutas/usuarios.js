@@ -1,4 +1,3 @@
-// Rutas de usuarios (montadas en /api/usuarios)
 const express = require('express');
 const { db } = require('../db');
 const { error } = require('../utils');
@@ -20,6 +19,7 @@ router.get('/', soloBibliotecario, (req, res) => {
 router.post('/', soloBibliotecario, (req, res) => {
   const u = req.body;
   if (!u.contraseña) throw error(400, 'La contraseña es obligatoria');
+
   const info = db.prepare(`
     INSERT INTO usuario (codigo, identificacion, nombres, correo, contraseña, rol, carrera, estado)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
@@ -35,7 +35,6 @@ router.put('/:id', soloBibliotecario, (req, res) => {
     WHERE id_usuario = ?`)
     .run(u.codigo, u.identificacion, u.nombres, u.correo, u.rol, u.carrera || null, u.estado, req.params.id);
 
-  // La contraseña solo se cambia si escribieron una nueva
   if (u.contraseña) {
     db.prepare('UPDATE usuario SET contraseña = ? WHERE id_usuario = ?').run(u.contraseña, req.params.id);
   }
